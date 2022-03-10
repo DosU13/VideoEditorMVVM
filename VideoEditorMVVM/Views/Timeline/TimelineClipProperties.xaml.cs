@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
-using VideoEditorMVVM.ViewModels;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -21,12 +20,11 @@ namespace VideoEditorMVVM.Views.Timeline
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class TimelinePage : Page
+    public sealed partial class TimelineClipProperties : Page
     {
-        public TimelinePage()
+        public TimelineClipProperties()
         {
             this.InitializeComponent();
         }
-
     }
 }

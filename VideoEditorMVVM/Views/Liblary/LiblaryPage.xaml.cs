@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using VideoEditorMVVM.Models;
 using VideoEditorMVVM.ViewModels;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -23,13 +25,32 @@ namespace VideoEditorMVVM.Views.Liblary
     /// </summary>
     public sealed partial class LiblaryPage : Page
     {
-        public LiblaryPage()
+        public LiblaryPage(LibraryModel libraryModel)
         {
             this.InitializeComponent();
 
-            ViewModel = new LiblaryViewModel();
+            ViewModel = new LiblaryViewModel(libraryModel);
         }
 
         public LiblaryViewModel ViewModel { get; set; }
+
+        private void onGroupsGridSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            ((ItemsWrapGrid)GroupsGrid.ItemsPanelRoot).ItemWidth = e.NewSize.Width;
+        }
+
+        private GridView lastGrid = null;
+        private void GridView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if(lastGrid!=null && lastGrid!=sender) lastGrid.SelectedItem = null;
+            lastGrid = sender as GridView;
+        }
+
+        private void DeleteSelected_Click(object sender, RoutedEventArgs e)
+        {
+            if (lastGrid == null) return;
+            (GroupsGrid.ItemsSource as ObservableCollection<GroupMediaViewModel>).
+                Remove(GroupsGrid.SelectedItem as GroupMediaViewModel);
+        }
     }
 }

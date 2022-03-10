@@ -11,58 +11,18 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="300"/>
+            <RowDefinition Height="0.7*"/>
+            <RowDefinition Height="0.3*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="450"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="0.4*"/>
+            <ColumnDefinition Width="0.6*"/>
         </Grid.ColumnDefinitions>
-        <Grid Grid.Row="0" Grid.Column="0">
-            <Button />
-        </Grid>
+        <local:TimelineClipProperties Grid.Row="0" Grid.Column="0"/>
         <MediaPlayerElement Grid.Row="0" Grid.Column="1"
                         x:Name="mediaPlayerElement" AutoPlay="False" Margin="5" 
                         HorizontalAlignment="Stretch" 
                         AreTransportControlsEnabled="True" />
-
-        <Grid Grid.Row="1" Grid.ColumnSpan="2">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="150"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Grid Grid.Row="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="60"/>
-                    <ColumnDefinition Width="60"/>
-                    <ColumnDefinition Width="60"/>
-                </Grid.ColumnDefinitions>
-                <Button Grid.Column="1"
-                    Content="←"/>
-                <Button Grid.Column="2"
-                    Content="→"/>
-                <Button Grid.Column="3"
-                    Content="Delete"/>
-            </Grid>
-            <GridView Grid.Row="2"
-                    x:Name="TimelineGrid"    
-                    ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                    ScrollViewer.HorizontalScrollMode="Enabled"
-                    ScrollViewer.VerticalScrollMode="Disabled" 
-                    CanReorderItems="True" 
-                    AllowDrop="True"> <!-- selectionChanged-->
-                <GridView.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <ItemsWrapGrid Orientation="Vertical" />
-                    </ItemsPanelTemplate>
-                </GridView.ItemsPanel>
-            </GridView>
-            <Button Grid.Row="3" Content="Finish"
-                Width="150" VerticalAlignment="Stretch"
-                HorizontalAlignment="Right"/>
-        </Grid>
+        <local:TimelineContentPage Grid.Row="1" Grid.ColumnSpan="2"/>
     </Grid>
 </Page>

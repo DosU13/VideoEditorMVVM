@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using VideoEditorMVVM.Models;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
@@ -22,14 +23,19 @@ namespace VideoEditorMVVM
     /// </summary>
     sealed partial class App : Application
     {
+        private static readonly Repository repository = new Repository();
+
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
         /// </summary>
+
+        private readonly Repository Repository = repository;
+
         public App()
         {
             this.InitializeComponent();
-            this.Suspending += OnSuspending;
+            Application.Current.Suspending += new SuspendingEventHandler(App_Suspending);
         }
 
         /// <summary>
@@ -66,7 +72,9 @@ namespace VideoEditorMVVM
                     // When the navigation stack isn't restored navigate to the first page,
                     // configuring the new page by passing required information as a navigation
                     // parameter
-                    rootFrame.Navigate(typeof(MainPage), e.Arguments);
+
+                    //rootFrame.Navigate(typeof(MainPage), e.Arguments);
+                    rootFrame.Content = new MainPage(Repository);
                 }
                 // Ensure the current window is active
                 Window.Current.Activate();
@@ -90,10 +98,11 @@ namespace VideoEditorMVVM
         /// </summary>
         /// <param name="sender">The source of the suspend request.</param>
         /// <param name="e">Details about the suspend request.</param>
-        private void OnSuspending(object sender, SuspendingEventArgs e)
+        async void App_Suspending(Object sender, SuspendingEventArgs e)
         {
             var deferral = e.SuspendingOperation.GetDeferral();
             //TODO: Save application state and stop any background activity
+            await repository.SaveToLocal();
             deferral.Complete();
         }
     }

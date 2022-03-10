@@ -1,4 +1,6 @@
-﻿<Page xmlns:my="using:Microsoft.UI.Xaml.Controls" 
+﻿<Page 
+    SizeChanged="{x:Bind CenterNavItems}"
+    xmlns:my="using:Microsoft.UI.Xaml.Controls" 
     x:Class="VideoEditorMVVM.MainPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -10,9 +12,6 @@
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
       mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-    <Page.DataContext>
-        <Binding Path="Composition" Source="{StaticResource Locator}" />
-    </Page.DataContext>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -21,19 +20,35 @@
         <Grid>
             <NavigationView x:Name="NavView"
                             ItemInvoked="NavView_ItemInvoked"
-                            Loaded="NavView_Loaded"
-                            PaneDisplayMode="Top">
+                            PaneDisplayMode="Top"
+                            IsBackButtonVisible="Collapsed"
+                            >
                 <NavigationView.MenuItems>
-                    <NavigationViewItem Content="Timing" 
-                        x:Name="TimingNavItem" 
-                        Tag="timing"                />
+                    <NavigationViewItem Width="{x:Bind CenterNavItemsMargin}" 
+                                        IsEnabled="False"/>
                     <NavigationViewItem Content="Liblary" 
-                        x:Name="LiblaryNavItem"
-                        Tag="liblary"/>
-                    <NavigationViewItem Content="timeline" 
-                        x:Name="TimeLineNavItem"
-                        Tag="timeline"/>
+                                        x:Name="LiblaryNavItem"
+                                        Tag="liblary"/>
+                    <NavigationViewItem Content="Timeline" 
+                                        x:Name="TimeLineNavItem"
+                                        FontSize="18"
+                                        Tag="timeline"/>
+                    <NavigationViewItem Content="Timing" 
+                                        x:Name="TimingNavItem" 
+                                        Tag="timing"/>
                 </NavigationView.MenuItems>
+                <NavigationView.PaneFooter>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" Margin="5"
+                            Content="Save" Click="Save_Click"/>
+                        <Button Grid.Column="1" Margin="5"
+                            Content="Load" Click="Load_Click"/>
+                    </Grid>
+                </NavigationView.PaneFooter>
                 <Frame x:Name="ContentFrame" Margin="24">
                     <Frame.ContentTransitions>
                         <TransitionCollection>
@@ -43,7 +58,8 @@
                 </Frame>
             </NavigationView>
         </Grid>
-        <TextBlock Grid.Row="3" Grid.ColumnSpan="2"
-                   Text="status" x:Name="Status"/>
+        <ScrollViewer HorizontalScrollMode="Auto" HorizontalScrollBarVisibility="Auto" Grid.Row="1" Grid.ColumnSpan="2">
+            <TextBlock Text="Status" x:Name="StatusTextBlock" IsTextSelectionEnabled="True"/>
+        </ScrollViewer>
     </Grid>
 </Page>

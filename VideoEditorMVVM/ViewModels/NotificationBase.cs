@@ -14,11 +14,9 @@ namespace VideoEditorMVVM.ViewModels
 	public class NotificationBase : INotifyPropertyChanged
 	{
 		public event PropertyChangedEventHandler PropertyChanged;
-
-		protected bool RaiseProperty<T>(ref T field, [CallerMemberName] string property = null)
+		protected void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
 		{
-			RaisePropertyChanged(property);
-			return true;
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 
 		// SetField (Name, value); // where there is a data member
@@ -26,7 +24,7 @@ namespace VideoEditorMVVM.ViewModels
 		{
 			if (EqualityComparer<T>.Default.Equals(field, value)) return false;
 			field = value;
-			RaisePropertyChanged(property);
+			NotifyPropertyChanged(property);
 			return true;
 		}
 
@@ -35,24 +33,19 @@ namespace VideoEditorMVVM.ViewModels
 		{
 			if (EqualityComparer<T>.Default.Equals(currentValue, newValue)) return;
 			doSet.Invoke();
-			RaisePropertyChanged(property);
-		}
-
-		private void RaisePropertyChanged(string property)
-		{
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
+			NotifyPropertyChanged(property);
 		}
 	}
 
-	public class NotificationBase<T> : NotificationBase where T : class, new()
+	public class NotificationBase<T> : NotificationBase where T : class
 	{
 		protected readonly T This;
 
 		public static implicit operator T(NotificationBase<T> thing) { return thing.This; }
 
-		protected NotificationBase(T thing = null)
+		protected NotificationBase(T thing)
 		{
-			This = thing ?? new T();
+			This = thing;
 		}
 	}
 }

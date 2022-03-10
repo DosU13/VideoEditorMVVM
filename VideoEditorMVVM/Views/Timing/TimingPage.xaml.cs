@@ -26,10 +26,6 @@ namespace VideoEditorMVVM.Views.Timing
         public TimingPage()
         {
             this.InitializeComponent();
-
-            ViewModel = new TimingViewModel();
         }
-
-        public TimingViewModel ViewModel { get; set; }
     }
 }

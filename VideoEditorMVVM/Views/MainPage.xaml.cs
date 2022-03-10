@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Xml.Linq;
+using VideoEditorMVVM.Data;
+using VideoEditorMVVM.Models;
 using VideoEditorMVVM.ViewModels;
 using VideoEditorMVVM.Views.Liblary;
 using VideoEditorMVVM.Views.Timeline;
@@ -10,6 +13,7 @@ using VideoEditorMVVM.Views.Timing;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Media.Core;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -27,37 +31,23 @@ namespace VideoEditorMVVM
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        private static TextBlock _status;
-        public static string status
+        private static TextBlock _status = null;
+        public static string Status
         {
-            set { _status.Text = value; }
+            set { if(_status!=null) _status.Text = value.Replace("\r\n", "->") + new Random().Next(); }
         }
-        public MainPage()
+
+        private Repository Repository;
+        public MainPage(Repository repository)
         {
             this.InitializeComponent();
 
-            _status = Status;
-            Task = new TaskViewModel();
-            Composition = new CompositionViewModel();
+            Repository = repository;
+
+            _status = StatusTextBlock;
+            //Composition = new CompositionViewModel();
         }
 
-        private void NavView_Loaded(object sender, RoutedEventArgs e)
-        {
-            // you can also add items in code behind
-            NavView.MenuItems.Add(new NavigationViewItemSeparator());
-            NavView.MenuItems.Add(new NavigationViewItem()
-            { Content = "My content", Icon = new SymbolIcon(Symbol.Folder), Tag = "content" });
-
-            // set the initial SelectedItem 
-            foreach (NavigationViewItemBase item in NavView.MenuItems)
-            {
-                if (item is NavigationViewItem && item.Tag.ToString() == "home")
-                {
-                    NavView.SelectedItem = item;
-                    break;
-                }
-            }
-        }
 
         private void NavView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
         {
@@ -82,7 +72,7 @@ namespace VideoEditorMVVM
                     break;
 
                 case "liblary":
-                    ContentFrame.Navigate(typeof(LiblaryPage));
+                    ContentFrame.Content = new LiblaryPage(Repository.LibraryModel);
                     break;
 
                 case "timeline":
@@ -91,8 +81,6 @@ namespace VideoEditorMVVM
             }
         }
 
-        public TaskViewModel Task { get; set; }
-        public CompositionViewModel Composition { get; set; }
 
         private async void Add_Click(object sender, RoutedEventArgs e)
         {
@@ -106,8 +94,85 @@ namespace VideoEditorMVVM
             var files = (await picker.PickMultipleFilesAsync()).ToList();
             if (files.Count > 0)
             {
-                Composition.AddFiles(files);
+                //Composition.AddFiles(files);
             }
         }
+
+        private async void Save_Click(object sender, RoutedEventArgs e)
+        {
+            var picker = new Windows.Storage.Pickers.FileSavePicker();
+            picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.VideosLibrary;
+            picker.FileTypeChoices.Add("XML files", new List<string>() { ".xml" });
+            picker.SuggestedFileName = "XML test file.xml";
+            try
+            {
+                StorageFile file = await picker.PickSaveFileAsync();
+                if (file != null)
+                {
+                    XDocument doc = Repository.ExportToXDoc();
+                    using (var stream = await file.OpenStreamForWriteAsync())
+                    { await System.Threading.Tasks.Task.Run(() => {
+                        stream.SetLength(0);
+                        doc.Save(stream);
+                        stream.Close();
+                    }); }
+                    Status = (file.Name + " Succesfully saved"); // This must be inside task
+                }
+            }
+            catch (Exception ex) { 
+                Status = ex.ToString();
+            }
+        }
+
+        private async void Load_Click(object sender, RoutedEventArgs e)
+        {
+            var picker = new Windows.Storage.Pickers.FileOpenPicker();
+            picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.VideosLibrary;
+            picker.FileTypeFilter.Add(".xml");
+            try
+            {
+                StorageFile file = await picker.PickSingleFileAsync();
+                if (file != null)
+                {
+                    XDocument doc = null;
+                    using (var stream = await file.OpenStreamForReadAsync())
+                    {
+                        await System.Threading.Tasks.Task.Run(() => {
+                            doc = XDocument.Load(stream);
+                            Repository.LoadFromXDoc(doc);
+                        });
+                    }
+                    if (doc!=null) Status = (file.Name + " Succesfully loaded"); 
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("HERE: -->>" + ex.ToString());
+                Status = "MainPage"+ex.ToString();
+            }
+        }
+
+        private int centerNavItemsMargin = 0;
+        public int CenterNavItemsMargin
+        {
+            get => centerNavItemsMargin;
+            set
+            {
+                centerNavItemsMargin = value;
+                Bindings.Update();
+            }
+        }
+
+        private void CenterNavItems()
+        {
+
+            double navWidth = NavView.ActualWidth;
+            double navItemsWid = LiblaryNavItem.ActualWidth + TimeLineNavItem.ActualWidth +
+                TimingNavItem.ActualWidth;
+            double calcedWid = (navWidth - navItemsWid) / 2;
+            if (calcedWid > 0) CenterNavItemsMargin = (int)calcedWid;
+            else CenterNavItemsMargin = 0;
+        }
+
     }
 }

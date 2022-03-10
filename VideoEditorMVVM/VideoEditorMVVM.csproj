@@ -119,27 +119,46 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\XMLConverter.cs" />
+    <Compile Include="Data\Library\FilePathData.cs" />
+    <Compile Include="Data\Library\LibraryData.cs" />
+    <Compile Include="Data\ProjectData.cs" />
+    <Compile Include="Data\UniqueDataBase.cs" />
+    <Compile Include="Data\Library\Media\MediaBase.cs" />
+    <Compile Include="Data\Library\Media\MediaGroup.cs" />
+    <Compile Include="Data\Library\Media\MediaSingle.cs" />
+    <Compile Include="Data\XmlDataBase.cs" />
     <Compile Include="Models\CompositionService.cs" />
-    <Compile Include="Models\Liblary.cs" />
-    <Compile Include="Models\Task.cs" />
+    <Compile Include="Models\LibraryModel.cs" />
+    <Compile Include="Models\Repository.cs" />
     <Compile Include="Models\Timeline.cs" />
     <Compile Include="Models\Timing.cs" />
     <Compile Include="Utils\NavHelper.cs" />
-    <Compile Include="ViewModels\CompositionViewModel.cs" />
-    <Compile Include="ViewModels\LiblaryViewModel.cs" />
+    <Compile Include="Utils\UpdateEverySec.cs" />
+    <Compile Include="ViewModels\Library\GroupMediaViewModel.cs" />
+    <Compile Include="ViewModels\Library\LiblaryViewModel.cs" />
+    <Compile Include="ViewModels\Library\SingleMediaViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\NotificationBase.cs" />
-    <Compile Include="ViewModels\TaskViewModel.cs" />
-    <Compile Include="ViewModels\TimelineViewModel.cs" />
-    <Compile Include="ViewModels\TimingViewModel.cs" />
-    <Compile Include="ViewModels\ViewModelLocator.cs" />
+    <Compile Include="Views\Liblary\ImageItem.xaml.cs">
+      <DependentUpon>ImageItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Liblary\LiblaryPage.xaml.cs">
       <DependentUpon>LiblaryPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Liblary\LibraryGroupMediaItem.xaml.cs">
+      <DependentUpon>LibraryGroupMediaItem.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\Timeline\TimelineClipProperties.xaml.cs">
+      <DependentUpon>TimelineClipProperties.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Timeline\TimelineContentPage.xaml.cs">
+      <DependentUpon>TimelineContentPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Timeline\TimelinePage.xaml.cs">
       <DependentUpon>TimelinePage.xaml</DependentUpon>
     </Compile>
@@ -167,13 +186,29 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Views\Liblary\ImageItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Liblary\LiblaryPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Liblary\LibraryGroupMediaItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Timeline\TimelineClipProperties.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Timeline\TimelineContentPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Timeline\TimelinePage.xaml">
       <SubType>Designer</SubType>
@@ -197,7 +232,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controls\" />
-    <Folder Include="Converters\" />
     <Folder Include="Services\" />
     <Folder Include="Strings\" />
   </ItemGroup>
