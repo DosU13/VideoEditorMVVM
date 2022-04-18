@@ -19,10 +19,10 @@
         </Grid.RowDefinitions>
         <Grid>
             <NavigationView x:Name="NavView"
+                            Loaded="NavView_Loaded"
                             ItemInvoked="NavView_ItemInvoked"
                             PaneDisplayMode="Top"
-                            IsBackButtonVisible="Collapsed"
-                            >
+                            IsBackButtonVisible="Collapsed">
                 <NavigationView.MenuItems>
                     <NavigationViewItem Width="{x:Bind CenterNavItemsMargin}" 
                                         IsEnabled="False"/>

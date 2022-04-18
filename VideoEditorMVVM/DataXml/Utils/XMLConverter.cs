@@ -5,9 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using VideoEditorMVVM.Data;
 
-namespace VideoEditorMVVM.Converters
+namespace VideoEditorMVVM.Data
 {
     internal class XMLConverter
     {

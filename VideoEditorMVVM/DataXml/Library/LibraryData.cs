@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using VideoEditorMVVM.Converters;
+using VideoEditorMVVM.Data;
 
-namespace VideoEditorMVVM.Data.Library
+namespace VideoEditorMVVM.Data
 {
     public class LibraryData : XmlDataBase
     {
@@ -14,19 +14,19 @@ namespace VideoEditorMVVM.Data.Library
         {
         }
 
-        public List<MediaBase> medias{ get; set; } = new List<MediaBase>();
+        public List<MediaBase> Medias{ get; set; } = new List<MediaBase>();
 
 
         public override XElement ToXElement()
         {
             ThisElement = new XElement("Library");
-            ThisElement.Add(XMLConverter.ListToElement(medias));
+            ThisElement.Add(XMLConverter.ListToElement(Medias));
             return base.ToXElement();
         }
         public override void LoadFromXElement(XElement xElement)
         {
             ThisElement = xElement.Element("Library");
-            medias = XMLConverter.ElementToMediaBaseList(ThisElement);
+            Medias = XMLConverter.ElementToMediaBaseList(ThisElement);
             base.LoadFromXElement(ThisElement);
         }
         public LibraryData(XElement xElement)

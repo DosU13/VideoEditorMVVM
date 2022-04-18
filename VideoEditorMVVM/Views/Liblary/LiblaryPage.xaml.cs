@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using VideoEditorMVVM.Data;
 using VideoEditorMVVM.Models;
 using VideoEditorMVVM.ViewModels;
 using Windows.Foundation;
@@ -39,18 +41,30 @@ namespace VideoEditorMVVM.Views.Liblary
             ((ItemsWrapGrid)GroupsGrid.ItemsPanelRoot).ItemWidth = e.NewSize.Width;
         }
 
-        private GridView lastGrid = null;
+        private object lastGridObj = null;
+        private GridView lastGrid { get => lastGridObj as GridView; }
         private void GridView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if(lastGrid!=null && lastGrid!=sender) lastGrid.SelectedItem = null;
-            lastGrid = sender as GridView;
+            lastGridObj = sender;
         }
 
         private void DeleteSelected_Click(object sender, RoutedEventArgs e)
         {
             if (lastGrid == null) return;
-            (GroupsGrid.ItemsSource as ObservableCollection<GroupMediaViewModel>).
-                Remove(GroupsGrid.SelectedItem as GroupMediaViewModel);
+            if(lastGrid == SinglesGrid)
+            {
+                ViewModel.SingleMedias.Remove(lastGrid.SelectedItem as SingleMediaViewModel);
+            }else if(lastGrid == GroupsGrid)
+            {
+                ViewModel.GroupMedias.Remove(lastGrid.SelectedItem as GroupMediaViewModel);
+            }
+            else
+            {
+                foreach(GroupMediaViewModel g in ViewModel.GroupMedias) { 
+                    g.FilePaths.Remove(lastGrid.SelectedItem as FilePathData);
+                }
+            }
         }
     }
 }

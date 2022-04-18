@@ -69,7 +69,6 @@ namespace VideoEditorMVVM.Views.Liblary
 
         private async void ImageChangeBtn_Click(object sender, RoutedEventArgs e)
         {
-            MainPage.Status = "Choose Image";
             var picker = new Windows.Storage.Pickers.FileOpenPicker();
             picker.ViewMode = Windows.Storage.Pickers.PickerViewMode.Thumbnail;
             picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.PicturesLibrary;

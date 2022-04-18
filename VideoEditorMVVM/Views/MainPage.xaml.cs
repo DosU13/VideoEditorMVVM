@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using VideoEditorMVVM.Data;
 using VideoEditorMVVM.Models;
@@ -34,20 +36,27 @@ namespace VideoEditorMVVM
         private static TextBlock _status = null;
         public static string Status
         {
-            set { if(_status!=null) _status.Text = value.Replace("\r\n", "->") + new Random().Next(); }
+            set { 
+                if(_status!=null) _status.Text = value.Replace("\r\n", "->") + new Random().Next();
+                Debug.WriteLine(value);
+            }
         }
 
-        private Repository Repository;
+        private Repository Repository { get; }
         public MainPage(Repository repository)
         {
             this.InitializeComponent();
-
             Repository = repository;
-
             _status = StatusTextBlock;
             //Composition = new CompositionViewModel();
         }
 
+        private void NavView_Loaded(object sender, RoutedEventArgs e)
+        {
+            //await Task.Delay(1000); //Later you should replace it with repository load complete listener
+            NavView.SelectedItem = NavView.MenuItems[3];
+            ContentFrame.Content = new TimingPage(Repository.TimingModel);
+        }
 
         private void NavView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
         {
@@ -68,42 +77,24 @@ namespace VideoEditorMVVM
             switch (item.Tag)
             {
                 case "timing":
-                    ContentFrame.Navigate(typeof(TimingPage));
+                    ContentFrame.Content = new TimingPage(Repository.TimingModel);
                     break;
-
                 case "liblary":
                     ContentFrame.Content = new LiblaryPage(Repository.LibraryModel);
                     break;
-
                 case "timeline":
-                    ContentFrame.Navigate(typeof(TimelinePage));
+                    ContentFrame.Content = new TimelinePage(Repository.TimelineModel);
                     break;
-            }
-        }
-
-
-        private async void Add_Click(object sender, RoutedEventArgs e)
-        {
-            var picker = new Windows.Storage.Pickers.FileOpenPicker();
-            picker.ViewMode = Windows.Storage.Pickers.PickerViewMode.Thumbnail;
-            picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.PicturesLibrary;
-            picker.FileTypeFilter.Add(".jpg");
-            picker.FileTypeFilter.Add(".jpeg");
-            picker.FileTypeFilter.Add(".png");
-
-            var files = (await picker.PickMultipleFilesAsync()).ToList();
-            if (files.Count > 0)
-            {
-                //Composition.AddFiles(files);
             }
         }
 
         private async void Save_Click(object sender, RoutedEventArgs e)
         {
             var picker = new Windows.Storage.Pickers.FileSavePicker();
-            picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.VideosLibrary;
-            picker.FileTypeChoices.Add("XML files", new List<string>() { ".xml" });
-            picker.SuggestedFileName = "XML test file.xml";
+            picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary;
+            picker.FileTypeChoices.Add("XML file", new List<string>() { ".xml" });
+            picker.FileTypeChoices.Add("VidU file", new List<string>() { ".VidU" });
+            picker.SuggestedFileName = "VidU test.VidU";
             try
             {
                 StorageFile file = await picker.PickSaveFileAsync();
@@ -127,8 +118,9 @@ namespace VideoEditorMVVM
         private async void Load_Click(object sender, RoutedEventArgs e)
         {
             var picker = new Windows.Storage.Pickers.FileOpenPicker();
-            picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.VideosLibrary;
+            picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary;
             picker.FileTypeFilter.Add(".xml");
+            picker.FileTypeFilter.Add(".VidU");
             try
             {
                 StorageFile file = await picker.PickSingleFileAsync();
@@ -137,10 +129,10 @@ namespace VideoEditorMVVM
                     XDocument doc = null;
                     using (var stream = await file.OpenStreamForReadAsync())
                     {
-                        await System.Threading.Tasks.Task.Run(() => {
-                            doc = XDocument.Load(stream);
-                            Repository.LoadFromXDoc(doc);
-                        });
+                        doc = await XDocument.LoadAsync(stream, LoadOptions.None, System.Threading.CancellationToken.None);
+                        Repository.LoadFromXDoc(doc);
+                        Frame rootFrame = Window.Current.Content as Frame;
+                        rootFrame?.Navigate(typeof(MainPage));
                     }
                     if (doc!=null) Status = (file.Name + " Succesfully loaded"); 
                 }
@@ -165,14 +157,12 @@ namespace VideoEditorMVVM
 
         private void CenterNavItems()
         {
-
-            double navWidth = NavView.ActualWidth;
+            double navWidth = NavView.ActualWidth - 170;
             double navItemsWid = LiblaryNavItem.ActualWidth + TimeLineNavItem.ActualWidth +
                 TimingNavItem.ActualWidth;
             double calcedWid = (navWidth - navItemsWid) / 2;
             if (calcedWid > 0) CenterNavItemsMargin = (int)calcedWid;
             else CenterNavItemsMargin = 0;
         }
-
     }
 }

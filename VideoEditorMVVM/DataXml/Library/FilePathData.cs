@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace VideoEditorMVVM.Data.Library
+namespace VideoEditorMVVM.Data
 {
     public class FilePathData : XmlDataBase
     {
@@ -27,18 +27,15 @@ namespace VideoEditorMVVM.Data.Library
             ThisElement.Add(Path);
             return base.ToXElement();
         }
-        public FilePathData(XElement xElement)
-        {
-            ThisElement = xElement.Element("file_path");
-            Path = ThisElement.Value;
-            base.LoadFromXElement(ThisElement);
-        }
-
         public override void LoadFromXElement(XElement xElement)
         {
-            ThisElement = xElement.Element("file_path");
-            Path = ThisElement.Value;
+            ThisElement = xElement?.Element("file_path");
+            Path = ThisElement?.Value;
             base.LoadFromXElement(xElement);
+        }
+        public FilePathData(XElement xElement)
+        {
+            LoadFromXElement(xElement);
         }
     }
 }

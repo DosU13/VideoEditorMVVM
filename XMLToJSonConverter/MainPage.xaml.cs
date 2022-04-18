@@ -13,16 +13,16 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
+// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
-namespace VideoEditorMVVM.Views.Timeline
+namespace XMLToJSonConverter
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class TimelineContentPage : Page
+    public sealed partial class MainPage : Page
     {
-        public TimelineContentPage()
+        public MainPage()
         {
             this.InitializeComponent();
         }

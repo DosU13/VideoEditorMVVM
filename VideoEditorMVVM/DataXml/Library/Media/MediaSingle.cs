@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using VideoEditorMVVM.Data.Library;
 using Windows.Storage;
 
 namespace VideoEditorMVVM.Data
@@ -20,8 +19,6 @@ namespace VideoEditorMVVM.Data
         {
             File = new FilePathData(file?.Path?.ToString());
         }
-
-        public String Test { get; set; } = "Test string";
 
         public FilePathData File { get; set; }
 

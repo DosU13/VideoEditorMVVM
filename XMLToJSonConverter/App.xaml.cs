@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
-using VideoEditorMVVM.Models;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
@@ -15,26 +14,22 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using ShuntingYardTest;
 
-namespace VideoEditorMVVM
+namespace XMLToJSonConverter
 {
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.
     /// </summary>
     sealed partial class App : Application
     {
-        private static Repository Repository { get; } = new Repository();
-
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
         /// </summary>
-
         public App()
         {
             this.InitializeComponent();
-            Application.Current.Suspending += new SuspendingEventHandler(App_Suspending);
+            this.Suspending += OnSuspending;
         }
 
         /// <summary>
@@ -71,9 +66,7 @@ namespace VideoEditorMVVM
                     // When the navigation stack isn't restored navigate to the first page,
                     // configuring the new page by passing required information as a navigation
                     // parameter
-
-                    //rootFrame.Navigate(typeof(MainPage), e.Arguments);
-                    rootFrame.Content = new MainPage(Repository);
+                    rootFrame.Navigate(typeof(MainPage), e.Arguments);
                 }
                 // Ensure the current window is active
                 Window.Current.Activate();
@@ -97,11 +90,10 @@ namespace VideoEditorMVVM
         /// </summary>
         /// <param name="sender">The source of the suspend request.</param>
         /// <param name="e">Details about the suspend request.</param>
-        async void App_Suspending(Object sender, SuspendingEventArgs e)
+        private void OnSuspending(object sender, SuspendingEventArgs e)
         {
             var deferral = e.SuspendingOperation.GetDeferral();
             //TODO: Save application state and stop any background activity
-            await Repository.SaveToLocal();
             deferral.Complete();
         }
     }

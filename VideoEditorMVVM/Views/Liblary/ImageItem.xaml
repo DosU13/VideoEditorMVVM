@@ -7,8 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     d:DesignHeight="112"
-    d:DesignWidth="112"
-    >
+    d:DesignWidth="112">
     
     <Grid
             PointerEntered="Image_PointerEntered"

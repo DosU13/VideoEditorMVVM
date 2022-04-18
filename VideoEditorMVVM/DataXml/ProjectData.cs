@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using VideoEditorMVVM.Data.Library;
+using VideoEditorMVVM.Data;
 
 namespace VideoEditorMVVM.Data
 {
@@ -17,11 +17,16 @@ namespace VideoEditorMVVM.Data
 
         public string Name { get; set; }
         public LibraryData Library { get; set; } = new LibraryData();
+        public TimingData Timing { get; set; } = new TimingData();
+        public TimelineData Timeline { get; set; } = new TimelineData();
 
         public override XElement ToXElement()
         {
             ThisElement = new XElement("VidU_Project");
-            ThisElement.Add(new XAttribute("name", Name), Library.ToXElement());
+            ThisElement.Add(new XAttribute("name", Name), 
+                            Library.ToXElement(),
+                            Timing.ToXElement(),
+                            Timeline.ToXElement());
             return ThisElement;
         }
 
@@ -30,6 +35,8 @@ namespace VideoEditorMVVM.Data
             ThisElement = xElement;
             Name = ThisElement.Attribute("name").Value;
             Library = new LibraryData(ThisElement);
+            Timing = new TimingData(ThisElement);
+            Timeline = new TimelineData(ThisElement);
             base.LoadFromXElement(ThisElement);
         }
     }

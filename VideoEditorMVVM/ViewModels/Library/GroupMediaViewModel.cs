@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VideoEditorMVVM.Data;
-using VideoEditorMVVM.Data.Library;
 using Windows.UI.Xaml;
 
 namespace VideoEditorMVVM.ViewModels
@@ -14,6 +14,8 @@ namespace VideoEditorMVVM.ViewModels
     {
         public GroupMediaViewModel(MediaGroup mediaGroup) : base(mediaGroup)
         {
+            FilePaths = new ObservableCollection<FilePathData>(This.Files);
+            FilePaths.CollectionChanged += OnCollectionChanged;
         }
 
         public int Id { get { return This.Id; } }
@@ -23,18 +25,40 @@ namespace VideoEditorMVVM.ViewModels
             set { SetProperty(This.Name, value, () => This.Name = value); }
         }
 
-        public ObservableCollection<FilePathData> FilePaths
+        public ObservableCollection<FilePathData> FilePaths { get; }
+        private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            get
+            MainPage.Status = "Collection: "+e.Action.ToString();
+            switch (e.Action)
             {
-                return new ObservableCollection<FilePathData>(This.Files);
+                case NotifyCollectionChangedAction.Add:
+                    This.Files.Insert(e.NewStartingIndex, e.NewItems[0] as FilePathData);
+                    break;
+                case NotifyCollectionChangedAction.Remove:
+                    This.Files.RemoveAt(e.OldStartingIndex);
+                    break;
+                //case NotifyCollectionChangedAction.Move:
+                //    FilePathData item = This.Files[e.OldStartingIndex];
+                //    This.Files.RemoveAt(e.OldStartingIndex);
+                //    This.Files.Insert(e.NewStartingIndex, item);
+                //    break;
+                //case NotifyCollectionChangedAction.Replace:
+                //    This.Files.Insert(e.NewStartingIndex, e.NewItems[0] as FilePathData);
+                //    break;
+                //case NotifyCollectionChangedAction.Reset:
+                //    This.Files.Clear();
+                //    break;
+                default:
+                    MainPage.Status = "GroupMedia collection change not fully implemented";
+                    break;
             }
         }
 
+
         public void AddItem_Click(object sender, RoutedEventArgs e)
         {
-            This.Files.Add(new FilePathData());
-            NotifyPropertyChanged(nameof(FilePaths));
+            FilePaths.Add(new FilePathData());
+            //GroupMediasChanged.Invoke(sender, null);
         }
 
         public bool IsTemplate

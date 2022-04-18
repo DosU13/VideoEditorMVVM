@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -16,6 +17,7 @@ namespace VideoEditorMVVM.ViewModels
 		public event PropertyChangedEventHandler PropertyChanged;
 		protected void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
 		{
+			//Debug.WriteLine("Here length -> "+PropertyChanged.GetInvocationList()[0].ToString());
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 
@@ -39,7 +41,7 @@ namespace VideoEditorMVVM.ViewModels
 
 	public class NotificationBase<T> : NotificationBase where T : class
 	{
-		protected readonly T This;
+		public readonly T This;
 
 		public static implicit operator T(NotificationBase<T> thing) { return thing.This; }
 

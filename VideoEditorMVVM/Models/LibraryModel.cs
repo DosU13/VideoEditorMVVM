@@ -5,45 +5,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VideoEditorMVVM.Data;
-using VideoEditorMVVM.Data.Library;
 
 namespace VideoEditorMVVM.Models
 {
     public class LibraryModel
     {
+        private LibraryData Library { get; set; }
         public LibraryModel(LibraryData library)
         {
             Library = library;
         }
-
-        public LibraryData Library { get; set; }
-
-        public ObservableCollection<MediaSingle> SingleMedias
-        {
-            get
-            {
-                return new ObservableCollection<MediaSingle>(Library.medias
-                    .Where(i => { return i is MediaSingle; })
-                    .Select(i => { return i as MediaSingle; }));
-            }
-        }
-        public ObservableCollection<MediaGroup> GroupMedias {
-            get
-            {
-                return new ObservableCollection<MediaGroup>(Library.medias
-                    .Where(i => { return i is MediaGroup; })
-                    .Select(i => { return i as MediaGroup; }));
-            }
-        }
+        public List<MediaBase> Medias { get => Library.Medias; }
 
         internal void AddSingleMedia()
         {
-            Library.medias.Add(new MediaSingle());
+            Library.Medias.Add(new MediaSingle());
         }
 
         internal void AddGroupMedia()
         {
-            Library.medias.Add(new MediaGroup());
+            Library.Medias.Add(new MediaGroup());
         }
     }
 }

@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using VideoEditorMVVM.Converters;
-using VideoEditorMVVM.Data.Library;
+using VideoEditorMVVM.Data;
+using VideoEditorMVVM.Data;
 using Windows.Storage;
 
 namespace VideoEditorMVVM.Data

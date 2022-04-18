@@ -8,7 +8,6 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using VideoEditorMVVM.Data;
-using VideoEditorMVVM.Data.Library;
 using VideoEditorMVVM.Models;
 using Windows.UI.Xaml.Controls;
 
@@ -18,62 +17,65 @@ namespace VideoEditorMVVM.ViewModels
     {
         public LiblaryViewModel(LibraryModel libraryModel): base(libraryModel)
         {
-        }
-        private void test(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            MainPage.Status = "It is working";
+            SingleMedias = new ObservableCollection<SingleMediaViewModel>();
+            foreach (var single in This.Medias
+                        .Where(i => { return i is MediaSingle; })
+                        .Select(i => { return i as MediaSingle; }))
+            {
+                SingleMedias.Add(new SingleMediaViewModel(single));
+            }
+            GroupMedias = new ObservableCollection<GroupMediaViewModel>();
+            foreach (var group in This.Medias
+                        .Where(i => { return i is MediaGroup; })
+                        .Select(i => { return i as MediaGroup; }))
+            {
+                GroupMedias.Add(new GroupMediaViewModel(group));
+            }
+            SingleMedias.CollectionChanged += OnSingleMediasCollectionChanged;
+            GroupMedias.CollectionChanged += OnGroupMediasCollectionChanged;
         }
 
-        public ObservableCollection<SingleMediaViewModel> SingleMedias { 
-            get { 
-                var res = new ObservableCollection<SingleMediaViewModel>();
-                foreach(var single in This.SingleMedias)
-                {
-                    res.Add(new SingleMediaViewModel(single));
-                }
-                return res;
-            } 
-        }
-        public ObservableCollection<GroupMediaViewModel> GroupMedias { 
-            get {
-                var res = new ObservableCollection<GroupMediaViewModel>();
-                foreach (var group in This.GroupMedias)
-                {
-                    var gmvm =  new GroupMediaViewModel(group);
-                    res.Add(gmvm);
-                    gmvm.FilePaths.CollectionChanged += GroupMediasChanged;
-                }
-                res.CollectionChanged += test;
-                return res;
+        public ObservableCollection<SingleMediaViewModel> SingleMedias { get; }
+        public ObservableCollection<GroupMediaViewModel> GroupMedias { get; }
+        private void OnSingleMediasCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            switch (e.Action)
+            {
+                case NotifyCollectionChangedAction.Add:
+                    This.Medias.Add((e.NewItems[0] as SingleMediaViewModel).This);
+                    break;
+                case NotifyCollectionChangedAction.Remove:
+                    This.Medias.Remove((e.OldItems[0] as SingleMediaViewModel).This);
+                    break;
+                default:
+                    MainPage.Status = "LibraryVM collection change not fully implemented";
+                    break;
             }
         }
-        private void GroupMediasChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void OnGroupMediasCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            NotifyPropertyChanged(nameof(GroupMedias));
+            switch (e.Action)
+            {
+                case NotifyCollectionChangedAction.Add:
+                    This.Medias.Add((e.NewItems[0] as GroupMediaViewModel).This);
+                    break;
+                case NotifyCollectionChangedAction.Remove:
+                    This.Medias.Remove((e.OldItems[0] as GroupMediaViewModel).This);
+                    break;
+                default:
+                    MainPage.Status = "LibraryVM collection change not fully implemented";
+                    break;
+            }
         }
 
         public void AddSingleMedia()
         {
-            This.AddSingleMedia();
-            NotifyPropertyChanged(nameof(SingleMedias));
+            SingleMedias.Add(new SingleMediaViewModel(new MediaSingle()));
         }
 
         public void AddGroupMedia()
         {
-            This.AddGroupMedia();
-            NotifyPropertyChanged(nameof(GroupMedias));
-        }
-
-        public void SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            foreach (SingleMediaViewModel i in e.RemovedItems)
-            {
-                i.Selected = false;
-            }
-            foreach (SingleMediaViewModel i in e.AddedItems)
-            {
-                i.Selected = true;
-            }
+            GroupMedias.Add(new GroupMediaViewModel(new MediaGroup()));
         }
     } 
 }

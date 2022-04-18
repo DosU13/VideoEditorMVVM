@@ -6,7 +6,6 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using VideoEditorMVVM.Data;
-using VideoEditorMVVM.Data.Library;
 
 namespace VideoEditorMVVM.ViewModels
 {
@@ -14,16 +13,6 @@ namespace VideoEditorMVVM.ViewModels
     {
         public SingleMediaViewModel(MediaSingle mediaSingle): base(mediaSingle)
         {}
-
-        private bool selected = false;
-        public bool Selected
-        {
-            get { return selected; }
-            set
-            {
-                SetProperty(ref selected, value);
-            }
-        }
 
         public int Id { get { return This.Id; } }
         public string Name

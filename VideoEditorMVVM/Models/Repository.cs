@@ -21,6 +21,8 @@ namespace VideoEditorMVVM.Models
         public ProjectData ProjectData { get { return projectData; } set { projectData = value; } }
 
         public LibraryModel LibraryModel { get { return new LibraryModel(ProjectData.Library); } }
+        public TimingModel TimingModel { get { return new TimingModel(ProjectData.Timing); } }
+        public TimelineModel TimelineModel { get { return new TimelineModel(ProjectData); } }
 
         public XDocument ExportToXDoc()
         {
@@ -35,10 +37,6 @@ namespace VideoEditorMVVM.Models
             p.LoadFromXElement(xDocument.Root);
             projectData = p;
         }
-
-
-
-
         // This example code can be used to read or write to an ApplicationData folder of your choice.
 
         // Change this to Windows.Storage.StorageFolder roamingFolder = Windows.Storage.ApplicationData.Current.RoamingFolder;
@@ -48,7 +46,7 @@ namespace VideoEditorMVVM.Models
         // Write data to a file
         public async Task SaveToLocal()
         {
-            StorageFile file = await localFolder.CreateFileAsync("dataStore.xml", CreationCollisionOption.ReplaceExisting);
+            StorageFile file = await localFolder.CreateFileAsync("dataStore.VidU", CreationCollisionOption.ReplaceExisting);
             XDocument doc = ExportToXDoc();
             using (var stream = await file.OpenStreamForWriteAsync())
             {
@@ -65,7 +63,7 @@ namespace VideoEditorMVVM.Models
         {
             try
             {
-                StorageFile file = await localFolder.GetFileAsync("dataStore.xml");
+                StorageFile file = await localFolder.GetFileAsync("dataStore.VidU");
                 XDocument doc = null;
                 using (var stream = await file.OpenStreamForReadAsync())
                 {

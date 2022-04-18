@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:VideoEditorMVVM.Views.Liblary"
     xmlns:local_vm="using:VideoEditorMVVM.ViewModels"
-    xmlns:local_data="using:VideoEditorMVVM.Data.Library"
+    xmlns:local_data="using:VideoEditorMVVM.Data"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
@@ -15,11 +15,14 @@
                       x:DataType="local_vm:SingleMediaViewModel">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="19"/>
+                    <RowDefinition Height="40"/> <!--19-->
                     <RowDefinition Height="112"/>
                 </Grid.RowDefinitions>
-                <TextBlock x:Name="Txt" Text="{x:Bind Name}" 
-                           Grid.Row="0" FontSize="9" />
+                <TextBox x:Name="Txt" Text="{x:Bind Name, Mode=TwoWay}" 
+                         Grid.Row="0" FontSize="15"
+                         HorizontalAlignment="Left" 
+                         VerticalAlignment="Center" 
+                         PlaceholderText="Name"/> <!--FontSize="9"-->
                 <local:ImageItem Grid.Row="1" x:Name="ImageItem"
                                  MediaPath="{x:Bind FilePath, Mode=TwoWay}"/>
             </Grid>
@@ -29,24 +32,29 @@
                       x:DataType="local_vm:GroupMediaViewModel">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="19"/>
+                    <RowDefinition Height="40"/> <!--19-->
                     <RowDefinition Height="122"/>
                 </Grid.RowDefinitions>
-                <TextBlock x:Name="Txt" Text="{x:Bind Name}" 
-                           Grid.Row="0" FontSize="9" />
+                <TextBox x:Name="Txt" 
+                         Text="{x:Bind Name, Mode=TwoWay}" 
+                         Grid.Row="0" FontSize="15" 
+                         PlaceholderText="Name" 
+                         HorizontalAlignment="Left" 
+                         VerticalAlignment="Center"/> <!--FontSize="9"-->
                 <Button x:Name="AddItemBtn" Grid.Row="0" Content="+" 
                         HorizontalAlignment="Center"
                         Click="{x:Bind AddItem_Click}"/>
-                <GridView Grid.Row="1"
-                          CanReorderItems="False" 
+                <GridView DataContext="{x:Bind}"
+                          Grid.Row="1"
+                          CanReorderItems="True" 
                           SelectionMode="Single"
-                          AllowDrop="False"
+                          AllowDrop="True"
                           SelectionChanged="GridView_SelectionChanged"
                           ScrollViewer.VerticalScrollBarVisibility="Disabled" 
                           ScrollViewer.HorizontalScrollBarVisibility="Auto"
                           ScrollViewer.HorizontalScrollMode="Enabled"
                           ScrollViewer.VerticalScrollMode="Disabled"
-                          ItemsSource="{x:Bind FilePaths}"
+                          ItemsSource="{x:Bind FilePaths, Mode=OneWay}"
                           ItemsPanel="{StaticResource HorizontalGridViewTemplate}">
                     <GridView.ItemTemplate>
                         <DataTemplate x:DataType="local_data:FilePathData">

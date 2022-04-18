@@ -1,14 +1,14 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProjectGuid>{99C1CE6D-2A27-42E3-A65F-A979504AAB8A}</ProjectGuid>
+    <ProjectGuid>{0b1c3488-0f27-4de8-a6b4-839da1329dcb}</ProjectGuid>
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>VideoEditorMVVM</RootNamespace>
-    <AssemblyName>VideoEditorMVVM</AssemblyName>
+    <RootNamespace>XMLToJSonConverter</RootNamespace>
+    <AssemblyName>XMLToJSonConverter</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.19041.0</TargetPlatformVersion>
@@ -119,65 +119,10 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Converters\NoteNumberConverter.cs" />
-    <Compile Include="Converters\SecMicroSecConverter.cs" />
-    <Compile Include="Converters\TimeToBarsConverter.cs" />
-    <Compile Include="DataXml\Utils\XMLConverter.cs" />
-    <Compile Include="DataXml\Library\FilePathData.cs" />
-    <Compile Include="DataXml\Library\LibraryData.cs" />
-    <Compile Include="DataXml\ProjectData.cs" />
-    <Compile Include="DataXml\Timeline\TimelineData.cs" />
-    <Compile Include="DataXml\Timeline\XMediaClip.cs" />
-    <Compile Include="DataXml\Timing\TimingData.cs" />
-    <Compile Include="DataXml\Timing\TimingItem.cs" />
-    <Compile Include="DataXml\Timing\TimingSequence.cs" />
-    <Compile Include="DataXml\UniqueDataBase.cs" />
-    <Compile Include="DataXml\Library\Media\MediaBase.cs" />
-    <Compile Include="DataXml\Library\Media\MediaGroup.cs" />
-    <Compile Include="DataXml\Library\Media\MediaSingle.cs" />
-    <Compile Include="DataXml\XmlDataBase.cs" />
-    <Compile Include="Data\CmpMediaClip.cs" />
-    <Compile Include="Models\CompositionModel.cs" />
-    <Compile Include="Models\LibraryModel.cs" />
-    <Compile Include="Models\Repository.cs" />
-    <Compile Include="Models\SequenceModel.cs" />
-    <Compile Include="Models\TimelineModel.cs" />
-    <Compile Include="Models\TimingModel.cs" />
-    <Compile Include="Utils\MidiFile.cs" />
-    <Compile Include="Utils\NavHelper.cs" />
-    <Compile Include="Utils\ShuntingYard\MyFormula.cs" />
-    <Compile Include="Utils\ShuntingYard\MyShuntingYard.cs" />
-    <Compile Include="Utils\ShuntingYard\Program.cs" />
-    <Compile Include="Utils\ShuntingYard\ShuntingYardBase.cs" />
-    <Compile Include="Utils\ShuntingYard\ShuntingYardSimpleMath.cs" />
-    <Compile Include="Utils\ShuntingYard\Tokens.cs" />
-    <Compile Include="ViewModels\Library\GroupMediaViewModel.cs" />
-    <Compile Include="ViewModels\Library\LiblaryViewModel.cs" />
-    <Compile Include="ViewModels\Library\SingleMediaViewModel.cs" />
-    <Compile Include="ViewModels\MainViewModel.cs" />
-    <Compile Include="ViewModels\NotificationBase.cs" />
-    <Compile Include="ViewModels\Timeline\MediaClipViewModel.cs" />
-    <Compile Include="ViewModels\Timeline\TimelineViewModel.cs" />
-    <Compile Include="ViewModels\Timing\TimingViewModel.cs" />
-    <Compile Include="Views\Liblary\ImageItem.xaml.cs">
-      <DependentUpon>ImageItem.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Liblary\LiblaryPage.xaml.cs">
-      <DependentUpon>LiblaryPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Liblary\LibraryGroupMediaItem.xaml.cs">
-      <DependentUpon>LibraryGroupMediaItem.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\MainPage.xaml.cs">
+    <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Views\Timeline\TimelinePage.xaml.cs">
-      <DependentUpon>TimelinePage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Timing\TimingPage.xaml.cs">
-      <DependentUpon>TimingPage.xaml</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -199,56 +144,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Views\Liblary\ImageItem.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Liblary\LiblaryPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Liblary\LibraryGroupMediaItem.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\MainPage.xaml">
+    <Page Include="MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Timeline\TimelinePage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Timing\TimingPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Melanchall.DryWetMidi">
-      <Version>6.0.1</Version>
-    </PackageReference>
-    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>6.2.12</Version>
-    </PackageReference>
-    <PackageReference Include="Microsoft.Toolkit.Uwp.UI.Controls.DataGrid">
-      <Version>7.1.2</Version>
-    </PackageReference>
-    <PackageReference Include="Microsoft.UI.Xaml">
-      <Version>2.7.0</Version>
-    </PackageReference>
-    <PackageReference Include="MvvmLightLibs">
-      <Version>5.4.1.1</Version>
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Controls\" />
-    <Folder Include="Services\" />
-    <Folder Include="Strings\" />
-  </ItemGroup>
+  
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
+
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
